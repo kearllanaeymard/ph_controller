@@ -11,6 +11,10 @@ float phValue;
 int IN1 = 12;
 int IN2 = 13;
 
+int basic_led = 2;
+int normal_led = 3;
+int acidic_led = 4;
+
 
 void ph_up(){
     digitalWrite(IN1, HIGH);
@@ -59,7 +63,6 @@ void main_prog(){
        Serial.println("NORMAL");
        Serial.println(" ");
 
-       lcd.clear();
        lcd.setCursor(1,0);
        lcd.print("pH Value:");
        lcd.setCursor(11,0);
@@ -69,6 +72,10 @@ void main_prog(){
        
        digitalWrite(IN1, LOW);
        digitalWrite(IN2, LOW);
+       digitalWrite(normal_led, HIGH);
+       digitalWrite(basic_led, LOW);
+       digitalWrite(acidic_led, LOW);
+       Serial.println("NORMAL // GREEN");
        delay(2000);
       }
       
@@ -78,14 +85,17 @@ void main_prog(){
        Serial.println("ACIDIC");
        Serial.println(" ");
 
-       lcd.clear();
        lcd.setCursor(1,0);
        lcd.print("pH Value:");
        lcd.setCursor(11,0);
        lcd.print(phValue);
        lcd.setCursor(5,2);
        lcd.print("ACIDIC");
-       
+
+       digitalWrite(acidic_led, HIGH);
+       digitalWrite(normal_led, LOW);
+       digitalWrite(basic_led, LOW);
+       Serial.println("ACIDIC // YELLOW");
        ph_up();
        delay(10000);
       }
@@ -96,14 +106,17 @@ void main_prog(){
        Serial.println("BASIC");
        Serial.println(" ");
 
-       lcd.clear();
        lcd.setCursor(1,0);
        lcd.print("pH Value:");
        lcd.setCursor(11,0);
        lcd.print(phValue);
        lcd.setCursor(5,2);
-       lcd.print("BASIC");
-       
+       lcd.print("BASIC ");
+
+       digitalWrite(basic_led, HIGH);
+       digitalWrite(normal_led, LOW);
+       digitalWrite(acidic_led, LOW);
+       Serial.println("BASIC // RED");
        ph_down();
        delay(10000);
       }
@@ -119,12 +132,29 @@ void setup()
 
   digitalWrite(IN2, LOW);
   digitalWrite(IN2, LOW);
+  
+  pinMode(basic_led, OUTPUT);
+  pinMode(normal_led, OUTPUT);
+  pinMode(acidic_led, OUTPUT);
+  
+  digitalWrite(basic_led, LOW);
+  digitalWrite(normal_led, LOW);
+  digitalWrite(acidic_led, LOW);
  
   Serial.println("- - - - - READY - - - - - ");
   Serial.println(" ");
+  lcd.setCursor(0,0);
+  lcd.print("Electronic pH");
+  lcd.setCursor(0,1);
+  lcd.print("Controller");
+  lcd.setCursor(0,3);
+  lcd.print("SBEE-4A");
+  delay(3000);
+  lcd.clear();
   lcd.setCursor(0,1);
   lcd.print("- - -READY- - -");
   delay(2000);
+  lcd.clear();
 }
 void loop()
 {
